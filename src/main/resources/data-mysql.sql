@@ -1,3 +1,5 @@
 insert into customers (customer_id, first_name, last_name, email_address, street_address, city, province, country, postal_code) values ('1146d776-3017-4747-b61b-7d6fa95a3839', 'Ulrica', 'Kersting', 'ukersting9@prweb.com', '76246 Beilfuss Road', 'Marisol', 'Setúbal', 'Portugal', 'P0M 2T6');
 insert into customers(customer_id,first_name,last_name,email_address,street_address,city,province,country,postal_code)values('c3540a89-cb47-4c96-888e-ff96708db4d8', 'Alick', 'Ucceli', 'aucceli0@dot.gov', '73 Shoshone Road', 'Barraute','Québec', 'Canada', 'P0M 2T6');
 insert into customers(customer_id,first_name,last_name,email_address,street_address,city,province,country,postal_code)values('c4540a89-cb47-4c96-888e-tt96708db4d8', 'Alick', 'Ucceli', 'aucceli0@dot.gov', '73 Shoshone Road', 'Barraute','Québec', 'Canada', 'P0M 2T6');
+
+insert into butchers (butcher_id, first_name, last_name, email_address, phone_number, salary, commission_rate,street_address, city, province, country, postal_code) values ('6d8e5f5b-8350-40ed-ac06-e484498f4f41', 'Dorry', 'Gepp', 'dgepp1@stanford.edu', '964-472-9806', 75000, 3.5, '23320 Pankratz Park', 'Barrhead', 'Alberta', 'Canada', 'T7N 1S3');
