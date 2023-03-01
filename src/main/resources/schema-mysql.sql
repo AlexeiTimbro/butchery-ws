@@ -1,10 +1,9 @@
 USE `butchery-db`;
 
+create table if not exists customers (
 
-create table if not exists clients (
-
-    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    client_id VARCHAR(36),
+                                         id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                         customer_id VARCHAR(36),
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email_address VARCHAR(50),

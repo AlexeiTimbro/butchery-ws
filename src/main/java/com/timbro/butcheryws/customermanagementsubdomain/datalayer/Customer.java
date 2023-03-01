@@ -1,12 +1,12 @@
-package com.timbro.butcheryws.clientmanagementdomain.datalayer;
+package com.timbro.butcheryws.customermanagementsubdomain.datalayer;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "clients")
+@Table(name = "customers")
 @Data
-public class Client {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +14,7 @@ public class Client {
 
 
     @Embedded
-    private ClientIdentifier clientIdentifier;
+    private CustomerIdentifier customerIdentifier;
 
     private String firstName;
     private String lastName;
@@ -24,13 +24,12 @@ public class Client {
     @Embedded
     private Address address;
 
-    Client() {
-        this.clientIdentifier = new ClientIdentifier();
+    Customer() {
+        this.customerIdentifier = new CustomerIdentifier();
     }
 
-    public Client(String firstName, String lastName, String emailAddress, Address address) {
-
-        this.clientIdentifier = new ClientIdentifier();
+    public Customer(CustomerIdentifier customerIdentifier, String firstName, String lastName, String emailAddress, Address address) {
+        this.customerIdentifier = customerIdentifier;
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;

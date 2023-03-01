@@ -1,5 +1,4 @@
-package com.timbro.butcheryws.clientmanagementdomain.presentationlayer;
-
+package com.timbro.butcheryws.customermanagementsubdomain.presentationlayer;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,8 +8,9 @@ import lombok.Value;
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ClientRequestModel {
+public class CustomerResponseModel {
 
+    private String customerId;
     private String firstName;
     private String lastName;
     private String emailAddress;

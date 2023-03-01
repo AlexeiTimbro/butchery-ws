@@ -1,4 +1,4 @@
-package com.timbro.butcheryws.clientmanagementdomain.datalayer;
+package com.timbro.butcheryws.customermanagementsubdomain.datalayer;
 
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
