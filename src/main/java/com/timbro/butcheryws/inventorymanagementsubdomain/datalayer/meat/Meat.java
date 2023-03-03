@@ -31,6 +31,8 @@ public class Meat {
 
     private String texture;
 
+    private String expirationDate;
 
+    private Integer price;
 
 }
