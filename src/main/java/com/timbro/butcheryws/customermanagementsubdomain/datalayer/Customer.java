@@ -12,7 +12,6 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     @Embedded
     private CustomerIdentifier customerIdentifier;
 
@@ -24,12 +23,13 @@ public class Customer {
     @Embedded
     private Address address;
 
-    Customer() {
+    Customer(){
         this.customerIdentifier = new CustomerIdentifier();
     }
 
-    public Customer(CustomerIdentifier customerIdentifier, String firstName, String lastName, String emailAddress, Address address) {
-        this.customerIdentifier = customerIdentifier;
+    public Customer(String firstName, String lastName, String emailAddress, Address address) {
+
+        this.customerIdentifier = new CustomerIdentifier();
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;

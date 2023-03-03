@@ -7,6 +7,7 @@ import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.Custome
 import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.CustomerResponseMapper;
 import com.timbro.butcheryws.customermanagementsubdomain.presentationlayer.CustomerRequestModel;
 import com.timbro.butcheryws.customermanagementsubdomain.presentationlayer.CustomerResponseModel;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.Butcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,12 +37,15 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public CustomerResponseModel addCustomer(CustomerRequestModel customerRequestModel) {
+
         Address address = new Address(customerRequestModel.getStreetAddress(), customerRequestModel.getCity(),
                 customerRequestModel.getProvince(), customerRequestModel.getCountry(), customerRequestModel.getPostalCode());
         Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel);
         customer.setAddress(address);
 
         return customerResponseMapper.entityToResponseModel(customerRepository.save(customer));
+
+
     }
 
     @Override

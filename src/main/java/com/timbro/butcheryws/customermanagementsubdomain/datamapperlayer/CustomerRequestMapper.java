@@ -11,4 +11,5 @@ public interface CustomerRequestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "customerIdentifier", ignore = true)
     Customer requestModelToEntity(CustomerRequestModel customerRequestModel);
+
 }
