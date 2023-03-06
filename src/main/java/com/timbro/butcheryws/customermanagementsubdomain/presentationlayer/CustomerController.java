@@ -26,9 +26,9 @@ public class CustomerController {
         return customerService.getCustomerByCustomerId(customerId);
     }
 
-    @PostMapping()
-    public CustomerResponseModel addCustomer(@RequestBody CustomerRequestModel customerRequestModel) {
-        return customerService.addCustomer(customerRequestModel);
+    @PostMapping("/purchaseId")
+    public CustomerResponseModel addCustomer(@RequestBody CustomerRequestModel customerRequestModel,@PathVariable String purchaseId) {
+        return customerService.addCustomer(customerRequestModel, purchaseId);
     }
 
     @PutMapping("/{customerId}")

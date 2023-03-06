@@ -1,5 +1,7 @@
 package com.timbro.butcheryws.purchasemanagementsubdomain.businesslayer;
 
+import com.timbro.butcheryws.customermanagementsubdomain.datalayer.Customer;
+import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerIdentifier;
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerRepository;
 import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.CustomerRequestMapper;
 import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.CustomerResponseMapper;
@@ -88,27 +90,89 @@ public class PurchaseServiceImpl implements PurchaseService{
 
 
     @Override
-    public PurchaseCustomerResponseModel getPurchaseStudents(String purchaseId) {
-        return null;
+    public PurchaseCustomerResponseModel getPurchaseCustomers(String purchaseId) {
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+
+        if(purchase == null){
+            return null;
+        }
+        List<Customer>customers = customerRepository.findAllCustomersByPurchaseIdentifier_PurchaseId(purchaseId);
+        List<CustomerResponseModel> customerResponseModels = customerResponseMapper.entityListToResponseModelList(customers);
+
+        return purchaseCustomerResponseMapper.entitiesToResponseModel(purchase, customerResponseModels);
     }
 
     @Override
     public CustomerResponseModel getCustomerInPurchaseByCustomerIdentifier_PurchaseId(String purchaseId, String customerId) {
-        return null;
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return null;
+        }
+
+        Customer foundCustomer = customerRepository.findByPurchaseIdentifier_PurchaseIdAndCustomerIdentifier_CustomerId(purchaseId,customerId);
+
+        if(foundCustomer == null){
+            return null;
+        }
+
+        return customerResponseMapper.entityToResponseModel(foundCustomer);
     }
 
     @Override
     public CustomerResponseModel addCustomerToPurchase(CustomerRequestModel customerRequestModel, String purchaseId) {
-        return null;
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+        if(purchase == null){
+            return null;
+        }
+        CustomerIdentifier customerIdentifier = new CustomerIdentifier(customerRequestModel.getCustomerId());
+        Customer customer= customerRequestMapper.requestModelToEntity(customerRequestModel, customerIdentifier, purchase.getPurchaseIdentifier());
+        Customer saved = customerRepository.save(customer);
+
+        return customerResponseMapper.entityToResponseModel(saved);
     }
 
     @Override
     public CustomerResponseModel updateCustomerInPurchase(CustomerRequestModel customerRequestModel, String purchaseId, String customerId) {
-        return null;
+
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return null;
+        }
+        Customer customer = customerRepository.findByCustomerIdentifier_CustomerId(customerId);
+        if(customer== null){
+            return null;
+        }
+
+        Customer updatedCustomer = customerRequestMapper.requestModelToEntity(customerRequestModel,customer.getCustomerIdentifier(),customer.getPurchaseIdentifier());
+        updatedCustomer.setId(customer.getId());
+
+        return customerResponseMapper.entityToResponseModel(customerRepository.save(updatedCustomer));
     }
 
     @Override
     public void removeCustomerFromPurchase(String purchaseId, String customerId) {
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return;
+        }
+        Customer customer = customerRepository.findByCustomerIdentifier_CustomerId(customerId);
+        if(customer== null){
+            return;
+        }
+        customerRepository.delete(customer);
 
     }
+
+    //CRUD FOR BUTCHER
+
+
+
+
+    //CRUD FOR MEAT
+
+
+
+
+
+
+
 }

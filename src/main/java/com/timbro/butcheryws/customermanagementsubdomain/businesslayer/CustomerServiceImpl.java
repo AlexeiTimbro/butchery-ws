@@ -2,11 +2,16 @@ package com.timbro.butcheryws.customermanagementsubdomain.businesslayer;
 
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.Address;
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.Customer;
+import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerIdentifier;
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerRepository;
 import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.CustomerRequestMapper;
 import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.CustomerResponseMapper;
 import com.timbro.butcheryws.customermanagementsubdomain.presentationlayer.CustomerRequestModel;
 import com.timbro.butcheryws.customermanagementsubdomain.presentationlayer.CustomerResponseModel;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.Purchase;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.PurchaseRepository;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseRequestMapper;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseResponseMapper;
 import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.Butcher;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +24,17 @@ public class CustomerServiceImpl implements CustomerService{
     private CustomerResponseMapper customerResponseMapper;
     private CustomerRequestMapper customerRequestMapper;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerResponseMapper customerResponseMapper, CustomerRequestMapper customerRequestMapper) {
+    private PurchaseRepository purchaseRepository;
+    private PurchaseRequestMapper purchaseRequestMapper;
+    private PurchaseResponseMapper purchaseResponseMapper;
+
+    public CustomerServiceImpl(CustomerRepository customerRepository, CustomerResponseMapper customerResponseMapper, CustomerRequestMapper customerRequestMapper, PurchaseRepository purchaseRepository, PurchaseRequestMapper purchaseRequestMapper, PurchaseResponseMapper purchaseResponseMapper) {
         this.customerRepository = customerRepository;
         this.customerResponseMapper = customerResponseMapper;
         this.customerRequestMapper = customerRequestMapper;
+        this.purchaseRepository = purchaseRepository;
+        this.purchaseRequestMapper = purchaseRequestMapper;
+        this.purchaseResponseMapper = purchaseResponseMapper;
     }
 
     @Override
@@ -36,14 +48,23 @@ public class CustomerServiceImpl implements CustomerService{
     }
 
     @Override
-    public CustomerResponseModel addCustomer(CustomerRequestModel customerRequestModel) {
+    public CustomerResponseModel addCustomer(CustomerRequestModel customerRequestModel, String purchaseId) {
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+
+        if(purchase == null){
+            return null;
+        }
+        CustomerIdentifier customerIdentifier = new CustomerIdentifier(customerRequestModel.getCustomerId());
 
         Address address = new Address(customerRequestModel.getStreetAddress(), customerRequestModel.getCity(),
                 customerRequestModel.getProvince(), customerRequestModel.getCountry(), customerRequestModel.getPostalCode());
-        Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel);
+        Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel,customerIdentifier,purchase.getPurchaseIdentifier());
         customer.setAddress(address);
 
-        return customerResponseMapper.entityToResponseModel(customerRepository.save(customer));
+        Customer saved = customerRepository.save(customer);
+
+        return customerResponseMapper.entityToResponseModel(saved);
 
 
     }
@@ -58,7 +79,7 @@ public class CustomerServiceImpl implements CustomerService{
 
         Address address = new Address(customerRequestModel.getStreetAddress(), customerRequestModel.getCity(),
                 customerRequestModel.getProvince(), customerRequestModel.getCountry(), customerRequestModel.getPostalCode());
-        Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel);
+        Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel, existingCustomer.getCustomerIdentifier(),existingCustomer.getPurchaseIdentifier());
         customer.setAddress(address);
 
 

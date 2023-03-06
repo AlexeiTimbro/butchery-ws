@@ -1,5 +1,7 @@
 package com.timbro.butcheryws.customermanagementsubdomain.datalayer;
 
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.Purchase;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.PurchaseIdentifier;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,6 +16,9 @@ public class Customer {
 
     @Embedded
     private CustomerIdentifier customerIdentifier;
+
+    @Embedded
+    private PurchaseIdentifier purchaseIdentifier;
 
     private String firstName;
     private String lastName;

@@ -18,7 +18,7 @@ public interface PurchaseService {
     void removePurchase(String purchaseId);
 
     //This is my Customer CRUD
-    PurchaseCustomerResponseModel getPurchaseStudents(String purchaseId);
+    PurchaseCustomerResponseModel getPurchaseCustomers(String purchaseId);
     CustomerResponseModel getCustomerInPurchaseByCustomerIdentifier_PurchaseId(String purchaseId, String customerId);
     CustomerResponseModel addCustomerToPurchase(CustomerRequestModel customerRequestModel,String purchaseId);
     CustomerResponseModel updateCustomerInPurchase(CustomerRequestModel customerRequestModel,String purchaseId, String customerId);

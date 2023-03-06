@@ -11,6 +11,8 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class CustomerRequestModel {
 
+    private String customerId;
+    private String purchaseId;
     private String firstName;
     private String lastName;
     private String emailAddress;

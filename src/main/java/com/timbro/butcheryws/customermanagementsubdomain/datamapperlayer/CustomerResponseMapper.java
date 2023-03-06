@@ -14,6 +14,7 @@ public interface CustomerResponseMapper {
 
 
     @Mapping(expression = "java(customer.getCustomerIdentifier().getCustomerId())", target = "customerId")
+    @Mapping(expression = "java(customer.getPurchaseIdentifier().getPurchaseId())", target = "purchaseId")
     @Mapping(expression = "java(customer.getAddress().getStreetAddress())", target = "streetAddress")
     @Mapping(expression = "java(customer.getAddress().getCity())", target = "city")
     @Mapping(expression = "java(customer.getAddress().getProvince())", target = "province")

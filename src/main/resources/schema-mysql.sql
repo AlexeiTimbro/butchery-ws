@@ -4,6 +4,7 @@ create table if not exists customers (
 
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     customer_id VARCHAR(36),
+    purchase_id VARCHAR(50),
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email_address VARCHAR(50),

@@ -12,7 +12,7 @@ public interface CustomerService {
 
     CustomerResponseModel getCustomerByCustomerId(String customerId);
 
-    CustomerResponseModel addCustomer(CustomerRequestModel customerRequestModel);
+    CustomerResponseModel addCustomer(CustomerRequestModel customerRequestModel, String purchaseId);
 
     CustomerResponseModel updateCustomer(CustomerRequestModel customerRequestModel, String customerId);
 
