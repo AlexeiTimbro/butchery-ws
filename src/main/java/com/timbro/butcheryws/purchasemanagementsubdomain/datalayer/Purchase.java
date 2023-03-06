@@ -20,20 +20,22 @@ public class Purchase {
     @Embedded
     private PurchaseIdentifier purchaseIdentifier;
 
-    @Embedded
-    private CustomerIdentifier customerIdentifier;
+    //@Embedded
+    //private CustomerIdentifier customerIdentifier;
 
-    @Embedded
-    private ButcherIdentifier butcherIdentifier;
+    //@Embedded
+    //private ButcherIdentifier butcherIdentifier;
 
-    private Date date;
+    private String dateTime;
+    private String totalPrice;
 
     Purchase(){
-
+        this.purchaseIdentifier = new PurchaseIdentifier();
     }
 
-    public Purchase(PurchaseIdentifier purchaseIdentifier, Date date) {
-        this.purchaseIdentifier = purchaseIdentifier;
-        this.date = date;
+    public Purchase(String dateTime,String totalPrice) {
+        this.purchaseIdentifier = new PurchaseIdentifier();
+        this.dateTime = dateTime;
+        this.totalPrice= totalPrice;
     }
 }

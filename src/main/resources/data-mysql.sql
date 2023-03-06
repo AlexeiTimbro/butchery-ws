@@ -18,7 +18,7 @@ insert into meats (meat_id,animal,environment,texture,expiration_date,price) val
 insert into meats (meat_id,animal,environment,texture,expiration_date,price) values ('5555bbbb-5d02-443c-9112-9661282befe1','Fish', 'Lake', 'tender', '24-08-2024', 13);
 insert into meats (meat_id,animal,environment,texture,expiration_date,price) values ('6676bbbb-5d02-443c-9112-9661282befe1','Duck', 'farm', 'soft', '24-08-2024', 20);
 
-
+insert into purchases(purchase_id,date_time,total_price) values ('9999pppp-pppp-pppp-pppp-9661282befe1','2023-03-09','20');
 
 
 

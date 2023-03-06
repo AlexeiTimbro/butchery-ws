@@ -3,6 +3,8 @@ package com.timbro.butcheryws.purchasemanagementsubdomain.datalayer;
 
 import jakarta.persistence.Embeddable;
 
+import java.util.UUID;
+
 @Embeddable
 public class PurchaseIdentifier {
 
@@ -10,11 +12,7 @@ public class PurchaseIdentifier {
 
 
     PurchaseIdentifier(){
-
-    }
-
-    public PurchaseIdentifier(String purchaseId) {
-        this.purchaseId = purchaseId;
+        this.purchaseId = UUID.randomUUID().toString();
     }
 
     public String getPurchaseId() {

@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PurchaseRepository extends JpaRepository<Purchase, Integer> {
 
     Purchase findByPurchaseIdentifier_PurchaseId(String purchaseId);
+    Boolean existsPurchaseByPurchaseIdentifier_PurchaseId(String purchaseId);
 }

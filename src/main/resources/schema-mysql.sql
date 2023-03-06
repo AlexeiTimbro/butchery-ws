@@ -44,3 +44,12 @@ create table if not exists meats (
     price INTEGER(200)
 
     );
+
+create table if not exists purchases (
+
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    purchase_id VARCHAR(50),
+    date_time VARCHAR(50),
+    total_price VARCHAR(50)
+
+    );
