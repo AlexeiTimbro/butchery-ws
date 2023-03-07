@@ -29,7 +29,7 @@ public class Meat {
         this.meatIdentifier = new MeatIdentifier();
     }
 
-    public Meat(MeatIdentifier meatIdentifier, String animal, String environment, String texture, String expirationDate, Integer price) {
+    public Meat(String animal, String environment, String texture, String expirationDate, Integer price) {
         this.meatIdentifier = new MeatIdentifier();
         this.animal = animal;
         this.environment = environment;
