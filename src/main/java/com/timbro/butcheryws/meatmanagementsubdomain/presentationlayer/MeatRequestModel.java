@@ -12,7 +12,8 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class MeatRequestModel {
 
-
+    private String meatId;
+    private String purchaseId;
     private String animal;
     private String environment;
     private String texture;

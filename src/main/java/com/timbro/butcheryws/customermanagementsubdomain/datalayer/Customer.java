@@ -23,21 +23,26 @@ public class Customer {
     private String firstName;
     private String lastName;
     private String emailAddress;
+    private String streetAddress;
+    private String city;
+    private String province;
+    private String country;
+    private String postalCode;
 
-
-    @Embedded
-    private Address address;
 
     Customer(){
         this.customerIdentifier = new CustomerIdentifier();
     }
 
-    public Customer(String firstName, String lastName, String emailAddress, Address address) {
-
+    public Customer(String firstName, String lastName, String emailAddress, String streetAddress, String city, String province, String country, String postalCode) {
         this.customerIdentifier = new CustomerIdentifier();
         this.firstName = firstName;
         this.lastName = lastName;
         this.emailAddress = emailAddress;
-        this.address = address;
+        this.streetAddress = streetAddress;
+        this.city = city;
+        this.province = province;
+        this.country = country;
+        this.postalCode = postalCode;
     }
 }

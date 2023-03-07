@@ -1,8 +1,10 @@
 package com.timbro.butcheryws.staffmanagamentsubdomain.businesslayer;
 
 
-import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.Address;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.Purchase;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.PurchaseRepository;
 import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.Butcher;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.ButcherIdentifier;
 import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.ButcherRepository;
 import com.timbro.butcheryws.staffmanagamentsubdomain.datamapperlayer.ButcherRequestMapper;
 import com.timbro.butcheryws.staffmanagamentsubdomain.datamapperlayer.ButcherResponseMapper;
@@ -19,11 +21,13 @@ public class ButcherServiceImpl implements ButcherService{
     private ButcherRepository butcherRepository;
     private ButcherResponseMapper butcherResponseMapper;
     private ButcherRequestMapper butcherRequestMapper;
+    private PurchaseRepository purchaseRepository;
 
-    public ButcherServiceImpl(ButcherRepository butcherRepository, ButcherResponseMapper butcherResponseMapper, ButcherRequestMapper butcherRequestMapper) {
+    public ButcherServiceImpl(ButcherRepository butcherRepository, ButcherResponseMapper butcherResponseMapper, ButcherRequestMapper butcherRequestMapper, PurchaseRepository purchaseRepository) {
         this.butcherRepository = butcherRepository;
         this.butcherResponseMapper = butcherResponseMapper;
         this.butcherRequestMapper = butcherRequestMapper;
+        this.purchaseRepository = purchaseRepository;
     }
 
     @Override
@@ -35,37 +39,35 @@ public class ButcherServiceImpl implements ButcherService{
     @Override
     public ButcherResponseModel getButcherByButcherId(String butcherId) {
 
-        return butcherResponseMapper.entityToResponseModel(butcherRepository.findByButcherIdentifier_ButcherId(butcherId));
+        return butcherResponseMapper.entityToResponseModel(butcherRepository.findButcherByButcherIdentifier_ButcherId(butcherId));
     }
 
     @Override
-    public ButcherResponseModel addButcher(ButcherRequestModel butcherRequestModel) {
+    public ButcherResponseModel addButcher(ButcherRequestModel butcherRequestModel, String purchaseId) {
 
-        Address address = new Address(butcherRequestModel.getStreetAddress(), butcherRequestModel.getCity(),
-                butcherRequestModel.getProvince(), butcherRequestModel.getCountry(), butcherRequestModel.getPostalCode());
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
 
-        Butcher butcher = butcherRequestMapper.requestModelToEntity(butcherRequestModel);
-        butcher.setAddress(address);
+        if(purchase == null){
+            return null;
+        }
+        ButcherIdentifier butcherIdentifier = new ButcherIdentifier((butcherRequestModel.getButcherId()));
 
-        return butcherResponseMapper.entityToResponseModel(butcherRepository.save(butcher));
+        Butcher butcher = butcherRequestMapper.requestModelToEntity(butcherRequestModel,butcherIdentifier,purchase.getPurchaseIdentifier());
+        Butcher saved = butcherRepository.save(butcher);
+
+        return butcherResponseMapper.entityToResponseModel(saved);
     }
 
     @Override
     public ButcherResponseModel updateButcher(ButcherRequestModel butcherRequestModel, String butcherId) {
 
-        Butcher existingButcher = butcherRepository.findByButcherIdentifier_ButcherId(butcherId);
+        Butcher existingButcher = butcherRepository.findButcherByButcherIdentifier_ButcherId(butcherId);
         if (existingButcher == null) {
             return null; //later throw exception
         }
 
-        Address address = new Address(butcherRequestModel.getStreetAddress(), butcherRequestModel.getCity(),
-                butcherRequestModel.getProvince(), butcherRequestModel.getCountry(), butcherRequestModel.getPostalCode());
-
-        Butcher butcher = butcherRequestMapper.requestModelToEntity(butcherRequestModel);
-        butcher.setAddress(address);
-
+        Butcher butcher = butcherRequestMapper.requestModelToEntity(butcherRequestModel,existingButcher.getButcherIdentifier(),existingButcher.getPurchaseIdentifier());
         butcher.setId(existingButcher.getId());
-        butcher.setButcherIdentifier(existingButcher.getButcherIdentifier());
 
         return butcherResponseMapper.entityToResponseModel(butcherRepository.save(butcher));
     }
@@ -73,7 +75,7 @@ public class ButcherServiceImpl implements ButcherService{
     @Override
     public void removeButcher(String butcherId) {
 
-        Butcher existingButcher = butcherRepository.findByButcherIdentifier_ButcherId(butcherId);
+        Butcher existingButcher = butcherRepository.findButcherByButcherIdentifier_ButcherId(butcherId);
         if (existingButcher == null) {
             return; //later throw exception
         }

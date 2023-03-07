@@ -9,8 +9,16 @@ public class MeatIdentifier {
 
     private String meatId;
 
+    //MeatIdentifier(){
+    //    this.meatId = UUID.randomUUID().toString();
+    //}
+
     MeatIdentifier(){
-        this.meatId = UUID.randomUUID().toString();
+
+    }
+
+    public MeatIdentifier(String meatId) {
+        this.meatId = meatId;
     }
 
     public String getMeatId() {

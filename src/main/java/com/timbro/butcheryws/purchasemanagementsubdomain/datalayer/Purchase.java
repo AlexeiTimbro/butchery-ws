@@ -2,6 +2,7 @@ package com.timbro.butcheryws.purchasemanagementsubdomain.datalayer;
 
 
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerIdentifier;
+import com.timbro.butcheryws.meatmanagementsubdomain.datalayer.MeatIdentifier;
 import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.ButcherIdentifier;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -25,6 +26,9 @@ public class Purchase {
 
     //@Embedded
     //private ButcherIdentifier butcherIdentifier;
+
+    //@Embedded
+    //private MeatIdentifier meatIdentifier;
 
     private String dateTime;
     private String totalPrice;

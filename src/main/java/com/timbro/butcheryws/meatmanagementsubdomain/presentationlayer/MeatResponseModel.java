@@ -11,6 +11,7 @@ import lombok.Value;
 public class MeatResponseModel {
 
     private String meatId;
+    private String purchaseId;
     private String animal;
     private String environment;
     private String texture;

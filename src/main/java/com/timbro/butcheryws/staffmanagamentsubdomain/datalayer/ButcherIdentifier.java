@@ -9,8 +9,16 @@ public class ButcherIdentifier {
 
     private String butcherId;
 
-    ButcherIdentifier() {
-        this.butcherId = UUID.randomUUID().toString();
+    //ButcherIdentifier() {
+    //    this.butcherId = UUID.randomUUID().toString();
+    //}
+
+    ButcherIdentifier(){
+
+    }
+
+    public ButcherIdentifier(String butcherId) {
+        this.butcherId = butcherId;
     }
 
     public String getButcherId() {

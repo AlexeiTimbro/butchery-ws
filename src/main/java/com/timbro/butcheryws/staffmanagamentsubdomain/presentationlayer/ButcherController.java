@@ -27,9 +27,9 @@ public class ButcherController {
         return butcherService.getButcherByButcherId(butcherId);
     }
 
-    @PostMapping()
-    public ButcherResponseModel addButcher(@RequestBody ButcherRequestModel butcherRequestModel) {
-        return butcherService.addButcher(butcherRequestModel);
+    @PostMapping("/purchaseId")
+    public ButcherResponseModel addButcher(@RequestBody ButcherRequestModel butcherRequestModel, @PathVariable String purchaseId) {
+        return butcherService.addButcher(butcherRequestModel, purchaseId);
     }
 
     @PutMapping("/{butcherId}")

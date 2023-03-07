@@ -1,6 +1,5 @@
 package com.timbro.butcheryws.customermanagementsubdomain.businesslayer;
 
-import com.timbro.butcheryws.customermanagementsubdomain.datalayer.Address;
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.Customer;
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerIdentifier;
 import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerRepository;
@@ -12,7 +11,6 @@ import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.Purchase;
 import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.PurchaseRepository;
 import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseRequestMapper;
 import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseResponseMapper;
-import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.Butcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,10 +55,7 @@ public class CustomerServiceImpl implements CustomerService{
         }
         CustomerIdentifier customerIdentifier = new CustomerIdentifier(customerRequestModel.getCustomerId());
 
-        Address address = new Address(customerRequestModel.getStreetAddress(), customerRequestModel.getCity(),
-                customerRequestModel.getProvince(), customerRequestModel.getCountry(), customerRequestModel.getPostalCode());
         Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel,customerIdentifier,purchase.getPurchaseIdentifier());
-        customer.setAddress(address);
 
         Customer saved = customerRepository.save(customer);
 
@@ -76,11 +71,8 @@ public class CustomerServiceImpl implements CustomerService{
         if (existingCustomer == null) {
             return null; //later throw exception
         }
-
-        Address address = new Address(customerRequestModel.getStreetAddress(), customerRequestModel.getCity(),
-                customerRequestModel.getProvince(), customerRequestModel.getCountry(), customerRequestModel.getPostalCode());
         Customer customer = customerRequestMapper.requestModelToEntity(customerRequestModel, existingCustomer.getCustomerIdentifier(),existingCustomer.getPurchaseIdentifier());
-        customer.setAddress(address);
+
 
 
         customer.setId(existingCustomer.getId());

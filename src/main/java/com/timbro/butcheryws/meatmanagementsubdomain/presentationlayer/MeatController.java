@@ -29,8 +29,8 @@ public class MeatController {
     }
 
     @PostMapping()
-    public MeatResponseModel addMeat(@RequestBody MeatRequestModel meatRequestModel) {
-        return meatService.addMeat(meatRequestModel);
+    public MeatResponseModel addMeat(@RequestBody MeatRequestModel meatRequestModel, @PathVariable String purchaseId) {
+        return meatService.addMeat(meatRequestModel,purchaseId);
     }
 
     @PutMapping("/{meatId}")

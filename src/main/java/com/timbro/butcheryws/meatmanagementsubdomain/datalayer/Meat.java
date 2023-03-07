@@ -1,7 +1,6 @@
 package com.timbro.butcheryws.meatmanagementsubdomain.datalayer;
 
-import com.timbro.butcheryws.customermanagementsubdomain.datalayer.Address;
-import com.timbro.butcheryws.customermanagementsubdomain.datalayer.CustomerIdentifier;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.PurchaseIdentifier;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,14 +16,13 @@ public class Meat {
     @Embedded
     private MeatIdentifier meatIdentifier;
 
+    @Embedded
+    private PurchaseIdentifier purchaseIdentifier;
+
     private String animal;
-
     private String environment;
-
     private String texture;
-
     private String expirationDate;
-
     private Integer price;
 
     Meat(){

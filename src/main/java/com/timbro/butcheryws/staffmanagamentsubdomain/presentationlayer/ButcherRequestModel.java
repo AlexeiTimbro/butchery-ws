@@ -10,14 +10,17 @@ import lombok.Value;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ButcherRequestModel {
 
+    private String butcherId;
+    private String purchaseId;
     private String firstName;
     private String lastName;
     private String emailAddress;
+    private Double salary;
+    private Double commissionRate;
     private String streetAddress;
     private String city;
     private String province;
     private String country;
     private String postalCode;
-    private Double salary;
-    private Double commissionRate;
+
 }

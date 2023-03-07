@@ -20,6 +20,7 @@ create table if not exists butchers (
 
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     butcher_id VARCHAR(36),
+    purchase_id VARCHAR(50),
     first_name VARCHAR(50),
     last_name VARCHAR(50),
     email_address VARCHAR(50),
@@ -38,6 +39,7 @@ create table if not exists meats (
 
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     meat_id VARCHAR(50),
+    purchase_id VARCHAR(50),
     animal VARCHAR(50),
     environment VARCHAR(50),
     texture VARCHAR(50),

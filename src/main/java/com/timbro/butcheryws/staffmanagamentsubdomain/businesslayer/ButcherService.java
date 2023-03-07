@@ -9,7 +9,7 @@ public interface ButcherService {
 
     List<ButcherResponseModel> getButchers();
     ButcherResponseModel getButcherByButcherId(String butcherId);
-    ButcherResponseModel addButcher(ButcherRequestModel butcherRequestModel);
+    ButcherResponseModel addButcher(ButcherRequestModel butcherRequestModel, String purchaseId);
     ButcherResponseModel updateButcher(ButcherRequestModel butcherRequestModel, String butcherId);
     void removeButcher(String butcherId);
 }

@@ -7,14 +7,24 @@ import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.Custome
 import com.timbro.butcheryws.customermanagementsubdomain.datamapperlayer.CustomerResponseMapper;
 import com.timbro.butcheryws.customermanagementsubdomain.presentationlayer.CustomerRequestModel;
 import com.timbro.butcheryws.customermanagementsubdomain.presentationlayer.CustomerResponseModel;
+import com.timbro.butcheryws.meatmanagementsubdomain.datalayer.Meat;
+import com.timbro.butcheryws.meatmanagementsubdomain.datalayer.MeatIdentifier;
+import com.timbro.butcheryws.meatmanagementsubdomain.datalayer.MeatRepository;
+import com.timbro.butcheryws.meatmanagementsubdomain.datamapperlayer.MeatRequestMapper;
+import com.timbro.butcheryws.meatmanagementsubdomain.datamapperlayer.MeatResponseMapper;
+import com.timbro.butcheryws.meatmanagementsubdomain.presentationlayer.MeatRequestModel;
+import com.timbro.butcheryws.meatmanagementsubdomain.presentationlayer.MeatResponseModel;
 import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.Purchase;
 import com.timbro.butcheryws.purchasemanagementsubdomain.datalayer.PurchaseRepository;
-import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseCustomerResponseMapper;
-import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseRequestMapper;
-import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.PurchaseResponseMapper;
-import com.timbro.butcheryws.purchasemanagementsubdomain.presentationlayer.PurchaseCustomerResponseModel;
-import com.timbro.butcheryws.purchasemanagementsubdomain.presentationlayer.PurchaseRequestModel;
-import com.timbro.butcheryws.purchasemanagementsubdomain.presentationlayer.PurchaseResponseModel;
+import com.timbro.butcheryws.purchasemanagementsubdomain.datamapperlayer.*;
+import com.timbro.butcheryws.purchasemanagementsubdomain.presentationlayer.*;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.Butcher;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.ButcherIdentifier;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datalayer.ButcherRepository;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datamapperlayer.ButcherRequestMapper;
+import com.timbro.butcheryws.staffmanagamentsubdomain.datamapperlayer.ButcherResponseMapper;
+import com.timbro.butcheryws.staffmanagamentsubdomain.presentationlayer.ButcherRequestModel;
+import com.timbro.butcheryws.staffmanagamentsubdomain.presentationlayer.ButcherResponseModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,17 +41,36 @@ public class PurchaseServiceImpl implements PurchaseService{
     private CustomerResponseMapper customerResponseMapper;
     private CustomerRequestMapper customerRequestMapper;
 
+    private ButcherRepository butcherRepository;
+    private ButcherRequestMapper butcherRequestMapper;
+    private ButcherResponseMapper butcherResponseMapper;
+
+    private MeatRepository meatRepository;
+    private MeatResponseMapper meatResponseMapper;
+    private MeatRequestMapper meatRequestMapper;
+
     private PurchaseCustomerResponseMapper purchaseCustomerResponseMapper;
+    private PurchaseButcherResponseMapper purchaseButcherResponseMapper;
+    private PurchaseMeatResponseMapper purchaseMeatResponseMapper;
+    private PurchaseMeatCustomerButcherMapper purchaseMeatCustomerButcherMapper;
 
-
-    public PurchaseServiceImpl(PurchaseRepository purchaseRepository, PurchaseResponseMapper purchaseResponseMapper, PurchaseRequestMapper purchaseRequestMapper, CustomerRepository customerRepository, CustomerResponseMapper customerResponseMapper, CustomerRequestMapper customerRequestMapper, PurchaseCustomerResponseMapper purchaseCustomerResponseMapper) {
+    public PurchaseServiceImpl(PurchaseRepository purchaseRepository, PurchaseResponseMapper purchaseResponseMapper, PurchaseRequestMapper purchaseRequestMapper, CustomerRepository customerRepository, CustomerResponseMapper customerResponseMapper, CustomerRequestMapper customerRequestMapper, ButcherRepository butcherRepository, ButcherRequestMapper butcherRequestMapper, ButcherResponseMapper butcherResponseMapper, MeatRepository meatRepository, MeatResponseMapper meatResponseMapper, MeatRequestMapper meatRequestMapper, PurchaseCustomerResponseMapper purchaseCustomerResponseMapper, PurchaseButcherResponseMapper purchaseButcherResponseMapper, PurchaseMeatResponseMapper purchaseMeatResponseMapper, PurchaseMeatCustomerButcherMapper purchaseMeatCustomerButcherMapper) {
         this.purchaseRepository = purchaseRepository;
         this.purchaseResponseMapper = purchaseResponseMapper;
         this.purchaseRequestMapper = purchaseRequestMapper;
         this.customerRepository = customerRepository;
         this.customerResponseMapper = customerResponseMapper;
         this.customerRequestMapper = customerRequestMapper;
+        this.butcherRepository = butcherRepository;
+        this.butcherRequestMapper = butcherRequestMapper;
+        this.butcherResponseMapper = butcherResponseMapper;
+        this.meatRepository = meatRepository;
+        this.meatResponseMapper = meatResponseMapper;
+        this.meatRequestMapper = meatRequestMapper;
         this.purchaseCustomerResponseMapper = purchaseCustomerResponseMapper;
+        this.purchaseButcherResponseMapper = purchaseButcherResponseMapper;
+        this.purchaseMeatResponseMapper = purchaseMeatResponseMapper;
+        this.purchaseMeatCustomerButcherMapper = purchaseMeatCustomerButcherMapper;
     }
 
     //CRUD FOR PURCHASE
@@ -85,6 +114,7 @@ public class PurchaseServiceImpl implements PurchaseService{
         }
         purchaseRepository.delete(existingPurchase);
     }
+
 
     //CRUD FOR CUSTOMER
 
@@ -162,17 +192,179 @@ public class PurchaseServiceImpl implements PurchaseService{
 
     }
 
+
     //CRUD FOR BUTCHER
 
 
+    @Override
+    public PurchaseButcherResponseModel getPurchaseButchers(String purchaseId) {
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+        if(purchase == null){
+            return null;
+        }
+        List<Butcher> butchers = butcherRepository.findButchersByPurchaseIdentifier_PurchaseId(purchaseId);
+        List<ButcherResponseModel> butcherResponseModels = butcherResponseMapper.entityListToResponseModelList(butchers);
+
+        return purchaseButcherResponseMapper.entitiesToResponseModel(purchase,butcherResponseModels);
+    }
+
+    @Override
+    public ButcherResponseModel getButcherInPurchase(String purchaseId, String butcherId) {
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return null;
+        }
+
+        Butcher foundButcher = butcherRepository.findByPurchaseIdentifier_PurchaseIdAndButcherIdentifier_ButcherId(purchaseId, butcherId);
+
+        if(foundButcher == null){
+            return null;
+        }
+        return butcherResponseMapper.entityToResponseModel(foundButcher);
+    }
+
+    @Override
+    public ButcherResponseModel addButcherToPurchase(ButcherRequestModel butcherRequestModel, String purchaseId) {
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+        if(purchase == null){
+            return null;
+        }
+
+        ButcherIdentifier butcherIdentifier = new ButcherIdentifier(butcherRequestModel.getButcherId());
+        Butcher butcher = butcherRequestMapper.requestModelToEntity(butcherRequestModel,butcherIdentifier,purchase.getPurchaseIdentifier());
+        Butcher saved = butcherRepository.save(butcher);
+        return butcherResponseMapper.entityToResponseModel(saved);
+
+    }
+
+    @Override
+    public ButcherResponseModel updateButcherInPurchase(ButcherRequestModel butcherRequestModel, String purchaseId, String butcherId) {
+
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return null;
+        }
+
+        Butcher butcher = butcherRepository.findButcherByButcherIdentifier_ButcherId(butcherId);
+        if(butcher == null){
+            return null;
+        }
+
+        Butcher updatedButcher = butcherRequestMapper.requestModelToEntity(butcherRequestModel,butcher.getButcherIdentifier(),butcher.getPurchaseIdentifier());
+        updatedButcher.setId(butcher.getId());
+        return butcherResponseMapper.entityToResponseModel(butcherRepository.save(updatedButcher));
+    }
+
+    @Override
+    public void removeButcherFromPurchase(String purchaseId, String butcherId) {
+
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return;
+        }
+        Butcher butcher = butcherRepository.findButcherByButcherIdentifier_ButcherId(butcherId);
+        if(butcher == null){
+            return;
+        }
+        butcherRepository.delete(butcher);
+    }
 
 
-    //CRUD FOR MEAT
+        //CRUD FOR MEAT
 
 
+    @Override
+    public PurchaseMeatResponseModel getPurchaseMeats(String purchaseId) {
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+        if(purchase == null){
+            return null;
+        }
+        List<Meat> meats = meatRepository.findMeatByPurchaseIdentifier_PurchaseId(purchaseId);
+        List<MeatResponseModel> meatResponseModels = meatResponseMapper.entityListToResponseModelList(meats);
+
+        return purchaseMeatResponseMapper.entitiesToResponseModel(purchase, meatResponseModels);
+    }
+
+    @Override
+    public MeatResponseModel getMeatInPurchase(String purchaseId, String meatId) {
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return null;
+        }
+        Meat foundMeat = meatRepository.findByPurchaseIdentifier_PurchaseIdAndAndMeatIdentifier_MeatId(purchaseId,meatId);
+
+        if(foundMeat == null){
+            return null;
+        }
+        return meatResponseMapper.entityToResponseModel(foundMeat);
+    }
+
+    @Override
+    public MeatResponseModel addMeatToPurchase(MeatRequestModel meatRequestModel, String purchaseId) {
+
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+        if(purchase == null){
+            return null;
+        }
+        MeatIdentifier meatIdentifier = new MeatIdentifier(meatRequestModel.getMeatId());
+        Meat meat= meatRequestMapper.requestModelToEntity(meatRequestModel,meatIdentifier,purchase.getPurchaseIdentifier());
+        Meat saved = meatRepository.save(meat);
+
+        return meatResponseMapper.entityToResponseModel(saved);
+    }
+
+    @Override
+    public MeatResponseModel updateMeatInPurchase(MeatRequestModel meatRequestModel, String purchaseId, String meatId) {
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return null;
+        }
+
+        Meat meat = meatRepository.findMeatByMeatIdentifier_MeatId(meatId);
+
+        if(meat == null){
+            return null;
+        }
+
+        Meat updatedMeat = meatRequestMapper.requestModelToEntity(meatRequestModel,meat.getMeatIdentifier(),meat.getPurchaseIdentifier());
+        updatedMeat.setId(meat.getId());
+        return meatResponseMapper.entityToResponseModel(meatRepository.save(updatedMeat));
+    }
+
+    @Override
+    public void removeMeatFromPurchase(String purchaseId, String meatId) {
+
+        if(!purchaseRepository.existsPurchaseByPurchaseIdentifier_PurchaseId(purchaseId)){
+            return;
+        }
+        Meat meat = meatRepository.findMeatByMeatIdentifier_MeatId(meatId);
+
+        if(meat == null){
+            return;
+        }
+        meatRepository.delete(meat);
+    }
 
 
+    //AGGREGATE GET REQUEST
 
+
+    @Override
+    public PurchaseMeatCustomerButcherModel getPurchaseMeatsCustomersButchers(String purchaseId) {
+        Purchase purchase = purchaseRepository.findByPurchaseIdentifier_PurchaseId(purchaseId);
+        if(purchase == null){
+            return null;
+        }
+        List<Meat> meats = meatRepository.findMeatByPurchaseIdentifier_PurchaseId(purchaseId);
+        List<MeatResponseModel> meatResponseModels = meatResponseMapper.entityListToResponseModelList(meats);
+
+        List<Customer>customers = customerRepository.findAllCustomersByPurchaseIdentifier_PurchaseId(purchaseId);
+        List<CustomerResponseModel> customerResponseModels = customerResponseMapper.entityListToResponseModelList(customers);
+
+        List<Butcher> butchers = butcherRepository.findButchersByPurchaseIdentifier_PurchaseId(purchaseId);
+        List<ButcherResponseModel> butcherResponseModels = butcherResponseMapper.entityListToResponseModelList(butchers);
+
+
+        return purchaseMeatCustomerButcherMapper.entitiesToResponseModel(purchase, meatResponseModels, customerResponseModels,butcherResponseModels);
+    }
 
 
 }
